@@ -20,36 +20,36 @@ int main() {
     uniform_int_distribution<> dis(1, 1000000000); // Valores até 10^9 conforme problema
 
     // Limite menor pois a ineficiente é muito lenta
-    for (int n = 1000; n <= 15000; n += 1000) {
+ for (int n = 1000; n <= 30000; n += 1000) {
         
-        // Gerar vetor aleatório
-        vector<int> A(n);
-        for(int i=0; i<n; ++i) A[i] = dis(gen);
+        long long total_time_inef = 0;
+        long long total_time_eff = 0;
+        int repeticoes = 5; // Faz a média de 5 execuções
 
-        // --- Medir Ineficiente ---
-        auto start = high_resolution_clock::now();
-        
-        // Chama a função que importamos do arquivo ineficiente.cpp 
-        volatile int ret1 = solve_inefficient(n, A); 
-        
-        auto stop = high_resolution_clock::now();
-        auto duration_inefficient = duration_cast<milliseconds>(stop - start);
+        for(int k=0; k < repeticoes; ++k) {
+            // Gera vetor novo a cada repetição para não viciar o cache
+            vector<int> A(n);
+            for(int i=0; i<n; ++i) A[i] = dis(gen);
 
-        // --- Medir Eficiente ---
-        start = high_resolution_clock::now();
-        
-        // Chama a função que importamos do arquivo eficiente.cpp
-        volatile int ret2 = solve_efficient(n, A);
-        
-        stop = high_resolution_clock::now();
-        auto duration_efficient = duration_cast<milliseconds>(stop - start);
+            // Medir Ineficiente
+            auto start = high_resolution_clock::now();
+            volatile int ret1 = solve_inefficient(n, A);
+            auto stop = high_resolution_clock::now();
+            total_time_inef += duration_cast<milliseconds>(stop - start).count();
 
-        // Saída para o gráfico
+            // Medir Eficiente
+            start = high_resolution_clock::now();
+            volatile int ret2 = solve_efficient(n, A);
+            stop = high_resolution_clock::now();
+            total_time_eff += duration_cast<milliseconds>(stop - start).count();
+        }
+
+        // Tira a média e imprime
         cout << n << " " 
-             << duration_inefficient.count() << " " 
-             << duration_efficient.count() << endl;
+             << (total_time_inef / repeticoes) << " " 
+             << (total_time_eff / repeticoes) << endl;
              
-        cerr << "N = " << n << " processado." << endl;
+        cerr << "N = " << n << " processado (Media de " << repeticoes << " execucoes)." << endl;
     }
 
     return 0;
