@@ -12,7 +12,7 @@ try:
     
     with open(nome_arquivo, 'r') as f:
         for linha in f:
-            # O formato esperado é: N TempoIneficiente TempoEficiente
+            # O formato esperado é: N Tempo Ineficiente Tempo Eficiente
             partes = linha.split()
             
             # Pula linhas vazias ou mal formatadas
