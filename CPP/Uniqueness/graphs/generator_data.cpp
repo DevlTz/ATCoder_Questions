@@ -4,11 +4,9 @@
 #include <random>
 #include <algorithm>
 
-
 using namespace std;
 using namespace std::chrono;
 #define BENCHMARK_MODE
-
 
 #include "../main/efc/efc_main.cpp"
 #include "../main/inef/inef_main.cpp"

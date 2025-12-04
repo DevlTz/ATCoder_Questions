@@ -5,7 +5,7 @@ tamanhos_n = []
 tempos_ineficiente = []
 tempos_eficiente = []
 
-nome_arquivo = 'dados.txt'
+nome_arquivo = input("nome do arquivo de dados ")
 
 try:
     print(f"Lendo dados de {nome_arquivo}...")
